@@ -6,7 +6,6 @@ import br.com.dio.exception.EntityNotFoundException;
 import br.com.dio.persistence.dao.BlockDAO;
 import br.com.dio.persistence.dao.CardDAO;
 import br.com.dio.persistence.dto.BoardColumnInfoDTO;
-import br.com.dio.persistence.dto.CardDetailsDTO;
 import br.com.dio.persistence.entity.CardEntity;
 import lombok.AllArgsConstructor;
 
@@ -120,6 +119,26 @@ public class CardService {
         } catch (SQLException ex) {
           connection.rollback();
           throw ex;
+        }
+    }
+
+    public void unblock(final Long id, final String reason) throws SQLException {
+        try {
+            var dao = new CardDAO(connection);
+            var optional = dao.findById(id);
+            var dto = optional.orElseThrow(
+                    () -> new EntityNotFoundException("O card de id %s não foi encontrado".formatted(id))
+            );
+            if(!dto.blocked()) {
+                var message = "O card %s não está bloqueado".formatted(id);
+                throw new CardBlockedException(message);
+            }
+            var blockDAO = new BlockDAO(connection);
+            blockDAO.unblock(reason, id);
+            connection.commit();
+        } catch (SQLException ex) {
+            connection.rollback();
+            throw ex;
         }
     }
 }

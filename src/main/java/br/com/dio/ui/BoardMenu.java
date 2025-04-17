@@ -88,6 +88,7 @@ public class BoardMenu {
         System.out.println("Informe o id do card que será bloqueado");
         var cardId = scanner.nextLong();
         System.out.println("Informe o motivo do bloqueio do card");
+        scanner.nextLine();
         var reason = scanner.nextLine();
         var boardColumnsInfo = entity.getBoardColumns().stream()
                 .map(bc -> new BoardColumnInfoDTO(bc.getId(), bc.getOrder(), bc.getKind()))
@@ -100,6 +101,16 @@ public class BoardMenu {
     }
 
     private void unblockCard() throws SQLException {
+        System.out.println("Informe o id do card que será desbloqueado");
+        var cardId = scanner.nextLong();
+        System.out.println("Informe o motivo do desbloqueio do card");
+        scanner.nextLine();
+        var reason = scanner.nextLine();
+        try(var connection = getConnection()) {
+            new CardService(connection).unblock(cardId, reason);
+        } catch (RuntimeException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     private void cancelCard() throws SQLException {

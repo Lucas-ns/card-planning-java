@@ -48,7 +48,7 @@ public class CardDAO {
                            c.title,
                            c.description,
                            b.blocked_at,
-                           b.blocked_reason,
+                           b.block_reason,
                            c.board_column_id,
                            bc.name,
                            (SELECT COUNT(sub_b.id)
@@ -71,9 +71,9 @@ public class CardDAO {
                         resultSet.getLong("c.id"),
                         resultSet.getString("c.title"),
                         resultSet.getString("c.description"),
-                        nonNull(resultSet.getString("b.blocked_reason")),
+                        nonNull(resultSet.getString("b.block_reason")),
                         toOffsetDateTime(resultSet.getTimestamp("b.blocked_at")),
-                        resultSet.getString("b.blocked_reason"),
+                        resultSet.getString("b.block_reason"),
                         resultSet.getInt("blocks_amount"),
                         resultSet.getLong("c.board_column_id"),
                         resultSet.getString("bc.name")
