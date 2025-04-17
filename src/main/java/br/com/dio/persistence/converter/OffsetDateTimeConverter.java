@@ -1,6 +1,5 @@
 package br.com.dio.persistence.converter;
 
-import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
@@ -15,6 +14,10 @@ public final class OffsetDateTimeConverter {
 
     public static OffsetDateTime toOffsetDateTime(final Timestamp value) {
         return nonNull(value) ? OffsetDateTime.ofInstant(value.toInstant(), UTC) : null;
+    }
+
+    public static Timestamp toTimestamp(final OffsetDateTime value) {
+        return nonNull(value) ? Timestamp.valueOf(value.atZoneSameInstant(UTC).toLocalDateTime()) : null;
     }
 
 }
